@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поддержать проект</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 620px;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 50px rgba(0,200,255,0.1);
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, #0ff, #f0f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+        .section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            text-align: left;
+        }
+        .section-title {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #0ff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title .icon { font-size: 18px; }
+        .payment-item {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .payment-item:hover {
+            border-color: rgba(0,255,200,0.4);
+            background: rgba(0,255,200,0.05);
+        }
+        .payment-label {
+            font-size: 10px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 1px;
+        }
+        .payment-value {
+            font-size: 11px;
+            letter-spacing: 0.8px;
+            word-break: break-all;
+            color: #ffd;
+            user-select: all;
+            -webkit-user-select: all;
+            cursor: text;
+        }
+        .copy-btn {
+            background: rgba(0,255,200,0.2);
+            border: 1px solid rgba(0,255,200,0.4);
+            color: #0ff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            min-width: 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .copy-btn:hover {
+            background: rgba(0,255,200,0.4);
+            box-shadow: 0 0 12px rgba(0,255,200,0.3);
+        }
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+        .copy-btn.copied {
+            background: rgba(0,255,50,0.4);
+            border-color: rgba(0,255,50,0.6);
+            color: #0f0;
+            animation: popGreen 0.3s ease-out;
+        }
+        .copy-btn.failed {
+            background: rgba(255,50,50,0.4);
+            border-color: rgba(255,50,50,0.6);
+            color: #faa;
+        }
+        @keyframes popGreen {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: #0f0;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            z-index: 9999;
+            transition: transform 0.3s ease-out;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            box-shadow: 0 8px 30px rgba(0,255,0,0.5);
+        }
+        .toast.error {
+            background: #f33;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(255,0,0,0.5);
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .qr-hint {
+            font-size: 9px;
+            color: rgba(255,255,255,0.3);
+            text-align: center;
+            margin-top: 4px;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin: 8px 0;
+        }
+        .total-support {
+            text-align: center;
+            font-size: 10px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+        .total-support span {
+            color: #ff0;
+            font-size: 13px;
+        }
+        @keyframes glow {
+            0%,100% { box-shadow: 0 0 8px rgba(0,255,200,0.2); }
+            50% { box-shadow: 0 0 18px rgba(0,255,200,0.5); }
+        }
+        .donate-anim {
+            animation: glow 2s infinite;
+            border-color: rgba(0,255,200,0.5) !important;
+        }
+        .manual-select-hint {
+            font-size: 8px;
+            color: rgba(255,255,255,0.25);
+            margin-top: 2px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>💎 ПОДДЕРЖАТЬ</h1>
+        <p class="subtitle">Нажмите на кнопку или выделите текст вручную</p>
+
+        <!-- СБП -->
+        <div class="section donate-anim">
+            <div class="section-title"><span class="icon">📱</span> СБП (Система Быстрых Платежей)</div>
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">Номер телефона</div>
+                    <div class="payment-value" id="sbpPhone">+7 987 773-37-26</div>
+                    <div class="manual-select-hint">Можно выделить и скопировать вручную</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('+79877733726', this, 'Номер СБП скопирован!')">📋 Копировать</button>
+            </div>
+            <div class="qr-hint">Откройте приложение банка → СБП → введите номер</div>
+        </div>
+
+        <!-- Криптовалюта -->
+        <div class="section">
+            <div class="section-title"><span class="icon">💎</span> Криптовалюта</div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">USDT TRC20</div>
+                    <div class="payment-value" style="font-size:9px;">TSriyG4o2XLRz4i19LbofoEgYw442dxBxY</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('TSriyG4o2XLRz4i19LbofoEgYw442dxBxY', this, 'Адрес TRC20 скопирован!')">📋</button>
+            </div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">ETH / USDT ERC20</div>
+                    <div class="payment-value" style="font-size:9px;">0x321be7777f172a94c5ba3c0bf711d6e7a20fd383</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('0x321be7777f172a94c5ba3c0bf711d6e7a20fd383', this, 'Адрес ERC20 скопирован!')">📋</button>
+            </div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">TON / USDT</div>
+                    <div class="payment-value" style="font-size:9px;">UQAcW_3PFhT_0QkdJIQpyzyVJyC3w5MU_KE6bF5LjJW2I9FD</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('UQAcW_3PFhT_0QkdJIQpyzyVJyC3w5MU_KE6bF5LjJW2I9FD', this, 'Адрес TON скопирован!')">📋</button>
+            </div>
+        </div>
+
+        <!-- Банковские карты -->
+        <div class="section">
+            <div class="section-title"><span class="icon">💳</span> Банковские карты</div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">Альфа-Банк</div>
+                    <div class="payment-value">2200 1523 2915 3343</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('2200152329153343', this, 'Номер карты Альфа-Банк скопирован!')">📋</button>
+            </div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">ПСБ Банк</div>
+                    <div class="payment-value">2200 0303 1244 2339</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('2200030312442339', this, 'Номер карты ПСБ скопирован!')">📋</button>
+            </div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">МТС-Банк</div>
+                    <div class="payment-value">2200 2806 9199 0081</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('2200280691990081', this, 'Номер карты МТС скопирован!')">📋</button>
+            </div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">ГазПРОМБанк</div>
+                    <div class="payment-value">2200 0101 8740 5744</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('2200010187405744', this, 'Номер карты ГазПРОМБанк скопирован!')">📋</button>
+            </div>
+
+            <div class="payment-item">
+                <div>
+                    <div class="payment-label">ЦУПИС</div>
+                    <div class="payment-value">2204 1801 8508 1502</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('2204180185081502', this, 'Номер карты ЦУПИС скопирован!')">📋</button>
+            </div>
+        </div>
+
+        <hr class="divider">
+        <div class="total-support">
+            Спасибо за поддержку! 💖<br>
+            Telegram: <span>@Highiilum</span>
+        </div>
+    </div>
+
+    <!-- Всплывающее уведомление -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + (isError ? 'error' : '');
+            // Сброс анимации
+            toast.classList.remove('show');
+            void toast.offsetWidth;
+            toast.classList.add('show');
+            // Скрыть через 2.5 сек
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        function copyText(text, btn, successMessage) {
+            // Способ 1: Современный Clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        btn.textContent = '✓ Готово!';
+                        btn.classList.add('copied');
+                        btn.classList.remove('failed');
+                        showToast(successMessage || 'Скопировано!', false);
+                        resetBtn(btn);
+                    })
+                    .catch(() => {
+                        fallbackCopy(text, btn, successMessage);
+                    });
+            } else {
+                fallbackCopy(text, btn, successMessage);
+            }
+        }
+
+        function fallbackCopy(text, btn, successMessage) {
+            // Способ 2: Создаём временный textarea (работает везде)
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.top = '-9999px';
+            textarea.style.left = '-9999px';
+            textarea.style.opacity = '0';
+            textarea.style.pointerEvents = 'none';
+            textarea.setAttribute('readonly', '');
+            // Важно: добавляем в DOM
+            document.body.appendChild(textarea);
+
+            // Выделяем
+            textarea.focus();
+            textarea.select();
+            textarea.setSelectionRange(0, text.length);
+
+            let copied = false;
+            try {
+                copied = document.execCommand('copy');
+            } catch (e) {
+                copied = false;
+            }
+
+            // Удаляем
+            document.body.removeChild(textarea);
+
+            if (copied) {
+                btn.textContent = '✓ Готово!';
+                btn.classList.add('copied');
+                btn.classList.remove('failed');
+                showToast(successMessage || 'Скопировано!', false);
+            } else {
+                // Способ 3: Показываем текст для ручного копирования
+                btn.textContent = '⚠ Выдели сам';
+                btn.classList.add('failed');
+                btn.classList.remove('copied');
+                showToast('Не удалось скопировать. Выделите текст вручную и нажмите Ctrl+C', true);
+                // Находим соседний элемент с текстом и выделяем его
+                const valueEl = btn.parentElement.querySelector('.payment-value');
+                if (valueEl) {
+                    const range = document.createRange();
+                    range.selectNodeContents(valueEl);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            }
+            resetBtn(btn);
+        }
+
+        function resetBtn(btn) {
+            clearTimeout(btn._resetTimeout);
+            btn._resetTimeout = setTimeout(() => {
+                btn.textContent = '📋 Копировать';
+                btn.classList.remove('copied', 'failed');
+            }, 2000);
+        }
+
+        // Делаем все payment-value выделяемыми по клику (двойная защита)
+        document.querySelectorAll('.payment-value').forEach(el => {
+            el.addEventListener('click', function() {
+                const range = document.createRange();
+                range.selectNodeContents(this);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                showToast('Текст выделен. Нажмите Ctrl+C чтобы скопировать', false);
+            });
+        });
+
+        console.log('💎 Страница пожертвований готова. Все кнопки копирования работают.');
+        console.log('   Если кнопка не сработала — просто выдели текст вручную и нажми Ctrl+C');
+    </script>
+</body>
+</html>
